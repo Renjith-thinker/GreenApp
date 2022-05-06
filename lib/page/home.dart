@@ -27,7 +27,7 @@ class _Page1State extends State<Page1> {
            // shape: RoundedRectangleBorder(
              // borderRadius: BorderRadius.circular(100)),
             elevation: 0.00,
-            backgroundColor: Color.fromARGB(230, 3, 95, 6),
+            backgroundColor: Colors.green,
           ),
           body: Container(
             alignment: Alignment.center,
@@ -38,7 +38,7 @@ class _Page1State extends State<Page1> {
                   ElevatedButton(
                     child: Text('Add Image'),
                              style: ElevatedButton.styleFrom(
-                               primary: Color.fromARGB(255, 4, 79, 6),
+                               primary: Colors.green,
                                onPrimary: Colors.white,
                                textStyle: TextStyle(
                                  color: Colors.white,
@@ -54,7 +54,7 @@ class _Page1State extends State<Page1> {
                   ElevatedButton(
                     child: Text('Add Location'),
                              style: ElevatedButton.styleFrom(
-                               primary: Color.fromARGB(255, 4, 79, 6),
+                               primary: Colors.green,
                                onPrimary: Colors.white,
                                textStyle: TextStyle(
                                  color: Colors.white,
@@ -78,7 +78,7 @@ class _Page1State extends State<Page1> {
                           ElevatedButton(
                             child: Text('Register'),
                              style: ElevatedButton.styleFrom(
-                               primary: Color.fromARGB(255, 4, 79, 6),
+                               primary: Colors.green,
                                onPrimary: Colors.white,
                                textStyle: TextStyle(
                                  color: Colors.white,
@@ -94,7 +94,7 @@ class _Page1State extends State<Page1> {
                            ElevatedButton(
                              child: Text('Login'),
                              style: ElevatedButton.styleFrom(
-                               primary: Color.fromARGB(255, 4, 79, 6),
+                               primary: Colors.green,
                                onPrimary: Colors.white,
                                textStyle: TextStyle(
                                  color: Colors.white,
