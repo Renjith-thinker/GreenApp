@@ -3,6 +3,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
+import '../imageupload/image_upload.dart';
+
 class Page1 extends StatefulWidget {
   const Page1({Key? key}) : super(key: key);
 
@@ -48,8 +50,9 @@ class _Page1State extends State<Page1> {
                              ),
                     
                       onPressed: () {
-                        Navigator.pushNamed(context, '/page2', arguments: {});
-                      },),
+                        Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const ImageUpload()));
+                  },),
                   SizedBox(height: 100.0 * ratio),
                   ElevatedButton(
                     child: Text('Add Location'),

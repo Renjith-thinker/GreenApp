@@ -31,10 +31,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.3.17
   firebase_core: ^1.16.0
+  firebase_storage: ^10.2.15
   flutter:
     sdk: flutter
   fluttertoast: ^8.0.9
   google_maps_flutter: ^2.1.4
+  image_picker: ^0.8.5
 
 dev_dependencies:
   flutter_lints: ^1.0.0
