@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ImageUpload()));
+                        MaterialPageRoute(builder: (context) => ImageUpload(userId: loggedInUser.uid,)));
                   },
                   child: Text("Sell Scraps Here!")),
               ElevatedButton(onPressed: () {

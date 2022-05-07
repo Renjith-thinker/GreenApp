@@ -1,9 +1,11 @@
 //import 'dart:html';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import '../imageupload/image_upload.dart';
+import '../model/user_model.dart';
 
 class Page1 extends StatefulWidget {
   const Page1({Key? key}) : super(key: key);
@@ -14,24 +16,37 @@ class Page1 extends StatefulWidget {
 
 class _Page1State extends State<Page1> {
   double ratio = 1;
-
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
+  
+   @override
+  void initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection("user")
+        .doc(user!.uid)
+        .get()
+        .then((value) {
+      this.loggedInUser = UserModel.fromMap(value.data());
+      setState(() {});
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        
-          appBar: AppBar(
-            title: Text("Green App"),
-            titleSpacing: 00.0,
-            centerTitle: true,
-            toolbarHeight: 60.2,
-           // shape: RoundedRectangleBorder(
-             // borderRadius: BorderRadius.circular(100)),
-            elevation: 0.00,
-            backgroundColor: Colors.green,
-          ),
-          body: Container(
+        appBar: AppBar(
+          title: Text("Green App"),
+          titleSpacing: 00.0,
+          centerTitle: true,
+          toolbarHeight: 60.2,
+          // shape: RoundedRectangleBorder(
+          // borderRadius: BorderRadius.circular(100)),
+          elevation: 0.00,
+          backgroundColor: Colors.green,
+        ),
+        body: Container(
             alignment: Alignment.center,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -39,89 +54,80 @@ class _Page1State extends State<Page1> {
                 children: <Widget>[
                   ElevatedButton(
                     child: Text('Add Image'),
-                             style: ElevatedButton.styleFrom(
-                               primary: Colors.green,
-                               onPrimary: Colors.white,
-                               textStyle: TextStyle(
-                                 color: Colors.white,
-                                 fontSize: 20,
-                                 fontStyle: FontStyle.normal
-                               ),
-                             ),
-                    
-                      onPressed: () {
-                        Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const ImageUpload()));
-                  },),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white,
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontStyle: FontStyle.normal),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ImageUpload(
+                                    userId: loggedInUser.uid,
+                                  )));
+                    },
+                  ),
                   SizedBox(height: 100.0 * ratio),
                   ElevatedButton(
                     child: Text('Add Location'),
-                             style: ElevatedButton.styleFrom(
-                               primary: Colors.green,
-                               onPrimary: Colors.white,
-                               textStyle: TextStyle(
-                                 color: Colors.white,
-                                 fontSize: 20,
-                                 fontStyle: FontStyle.normal
-                               ),
-                             ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/page3', arguments: {});
-                      },),
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green,
+                      onPrimary: Colors.white,
+                      textStyle: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontStyle: FontStyle.normal),
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/page3', arguments: {});
+                    },
+                  ),
                   SizedBox(height: 100.0 * ratio),
-                  
-                  
-                  
-                 // persistentFooterButtons:<Widget>[
-                    Center(
-                      child: Row(
+
+                  // persistentFooterButtons:<Widget>[
+                  Center(
+                    child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        children:<Widget>[
+                        children: <Widget>[
                           ElevatedButton(
                             child: Text('Register'),
-                             style: ElevatedButton.styleFrom(
-                               primary: Colors.green,
-                               onPrimary: Colors.white,
-                               textStyle: TextStyle(
-                                 color: Colors.white,
-                                 fontSize: 40,
-                                 fontStyle: FontStyle.normal
-                               ),
-                             ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              onPrimary: Colors.white,
+                              textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontStyle: FontStyle.normal),
+                            ),
                             onPressed: () {
-                            Navigator.pushNamed(context, '/page4', arguments: {});
-                          },
-                          
+                              Navigator.pushNamed(context, '/page4',
+                                  arguments: {});
+                            },
                           ),
-                           ElevatedButton(
-                             child: Text('Login'),
-                             style: ElevatedButton.styleFrom(
-                               primary: Colors.green,
-                               onPrimary: Colors.white,
-                               textStyle: TextStyle(
-                                 color: Colors.white,
-                                 fontSize: 40,
-                                 fontStyle: FontStyle.normal
-                               ),
-                             ),
-                             
-                             onPressed: () {
-                            Navigator.pushNamed(context, '/page7', arguments: {});
-                          }, 
-                          
-                           ),
-                    
-                        ]
-                      ),
-                    )
-                  ]
-            )
-                ),
-                
-          ),
-        );
-    
-    
+                          ElevatedButton(
+                            child: Text('Login'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              onPrimary: Colors.white,
+                              textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  fontStyle: FontStyle.normal),
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/page7',
+                                  arguments: {});
+                            },
+                          ),
+                        ]),
+                  )
+                ])),
+      ),
+    );
   }
 }

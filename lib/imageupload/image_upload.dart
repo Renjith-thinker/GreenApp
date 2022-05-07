@@ -1,6 +1,7 @@
 //import 'dart:html';
 import 'dart:async';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -8,7 +9,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ImageUpload extends StatefulWidget {
-  const ImageUpload({Key? key}) : super(key: key);
+  String? userId;
+
+  ImageUpload({Key? key, this.userId}) : super(key: key);
+  //ImageUpload.fromFirebaseUser({User? user}) {
+  //this.userId = user!.userId;
 
   @override
   State<ImageUpload> createState() => _ImageUploadState();
@@ -19,8 +24,9 @@ class _ImageUploadState extends State<ImageUpload> {
   final imagePicker = ImagePicker();
   String? downloadURL;
   Future imagePickerGalleryMethod() async {
-    final pickGallery = await imagePicker.pickImage(source: ImageSource.camera);
-    //final pickCamera = await imagePicker.pickImage(source: ImageSource.camera);
+    final pickGallery =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+
     setState(() {
       if (pickGallery != null) {
         _image = File(pickGallery.path);
@@ -29,7 +35,6 @@ class _ImageUploadState extends State<ImageUpload> {
   }
 
   Future imagePickerCameraMethod() async {
-    //final pickGallery = await imagePicker.pickImage(source: ImageSource.camera);
     final pickCamera = await imagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       if (pickCamera != null) {
@@ -39,10 +44,19 @@ class _ImageUploadState extends State<ImageUpload> {
   }
 
   Future uploadImage() async {
-    Reference ref = FirebaseStorage.instance.ref().child("images");
+    final postID = DateTime.now().microsecondsSinceEpoch.toString();
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    Reference ref = FirebaseStorage.instance
+        .ref()
+        .child("${widget.userId}/images")
+        .child("post_$postID");
     await ref.putFile(_image!);
     downloadURL = await ref.getDownloadURL();
-    print(downloadURL);
+    await firebaseFirestore
+    .collection("users")
+    .doc(widget.userId)
+    .collection("images")
+    .add({'downloadURL': downloadURL});
   }
 
   @override
@@ -96,15 +110,15 @@ class _ImageUploadState extends State<ImageUpload> {
                                         onPressed: () {
                                           imagePickerCameraMethod();
                                         },
-                                        child: Text("Capture Now")),
+                                        child: const Text("Capture Now")),
                                   ],
                                 ),
                                 //ElevatedButton(onPressed: (){}, child: Text("Select Image")),
                                 ElevatedButton(
                                     onPressed: () {
-                                      const ImageUpload();
+                                      uploadImage();
                                     },
-                                    child: Text("Upload Image")),
+                                    child: const Text("Upload Image")),
                               ],
                             ),
                           ),
